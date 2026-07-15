@@ -1,0 +1,142 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FaultCycle from "../components/FaultCycle.astro";
+import ResearchCard from "../components/ResearchCard.astro";
+import { publications } from "../data/publications";
+import { researchStories } from "../data/research";
+import { homeUpdates, profile } from "../data/site";
+
+const latestPublished = publications.filter((publication) => publication.status === "Published").slice(0, 3);
+---
+
+<BaseLayout title={profile.name}>
+  <section class="home-hero">
+    <div class="site-shell">
+      <div class="hero-surface">
+        <div class="hero-copy">
+          <div>
+            <p class="eyebrow">Research agenda · Earthquake physics</p>
+            <h1 class="hero-title">
+              The physics <em>beneath</em> a fault shapes the earthquake above it.
+            </h1>
+            <p class="hero-description">
+              I study how evolving rock rheology shapes earthquake cycles, from microscopic fault contacts to dynamic rupture and fault-system segmentation.
+            </p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="/research">Explore research</a>
+              <a class="button button-secondary" href="/files/Binhao_Wang_CV.pdf">Download CV</a>
+            </div>
+          </div>
+
+          <div class="hero-details" aria-label="Research themes">
+            <span>Rock rheology</span>
+            <span>Earthquake cycles</span>
+            <span>Fault systems</span>
+          </div>
+        </div>
+
+        <div class="hero-art">
+          <FaultCycle />
+          <div class="hero-identity">
+            <div class="portrait-placeholder" aria-hidden="true">BW</div>
+            <p>
+              {profile.name}
+              <small>Portrait forthcoming</small>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="site-shell">
+      <div class="section-topline">
+        <div>
+          <p class="section-kicker">Three research chapters</p>
+          <h2 class="section-heading">From grain contacts to earthquake systems.</h2>
+        </div>
+        <a class="section-link" href="/research">Research in detail</a>
+      </div>
+
+      <div class="chapter-grid">
+        {researchStories.map((story, index) => <ResearchCard story={story} index={index} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="site-shell method-strip">
+      <div class="method-intro">
+        <p class="section-kicker">How I work</p>
+        <h2>Follow the mechanism across scales.</h2>
+        <p>
+          The same physical question looks different in a rock laboratory, a numerical rupture model, and a seismic or geodetic record. I use each as evidence for the others.
+        </p>
+      </div>
+
+      <div class="method-list">
+        <article>
+          <span class="method-number">01</span>
+          <div>
+            <h3>Laboratory friction</h3>
+            <p>Measure how contact quality, temperature, and chemical alteration change the strength and healing of fault materials.</p>
+          </div>
+        </article>
+        <article>
+          <span class="method-number">02</span>
+          <div>
+            <h3>Earthquake-cycle simulations</h3>
+            <p>Translate constitutive physics into dynamic models that can produce creep, slow slip, swarms, pulses, and large ruptures.</p>
+          </div>
+        </article>
+        <article>
+          <span class="method-number">03</span>
+          <div>
+            <h3>Observational seismology</h3>
+            <p>Use rupture, repeating-earthquake, and fault-system observations to test what the rock-centric models must explain.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="site-shell">
+      <div class="updates-layout">
+        <div>
+          <p class="section-kicker">Selected updates</p>
+          <h2 class="section-heading">A research record that stays current.</h2>
+          <p class="updates-intro">
+            Publications are curated in Git and checked against ORCID monthly. Any proposed change arrives as a reviewable pull request.
+          </p>
+        </div>
+        <ul class="update-list">
+          {homeUpdates.map((update) => (
+            <li>
+              <span class="update-year">{update.year}</span>
+              <strong>{update.title}</strong>
+              <span class="update-kind">{update.kind}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="site-shell callout">
+      <div>
+        <p class="section-kicker">Selected record</p>
+        <h2>Research results, with the evidence close at hand.</h2>
+        <p>
+          Recent work connects thermally activated friction, rupture segmentation, and the dynamics of earthquake energy and recurrence.
+        </p>
+      </div>
+      <div class="callout-side">
+        <p>{latestPublished.length} selected published papers</p>
+        <a class="button button-ink" href="/publications">Browse publications</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

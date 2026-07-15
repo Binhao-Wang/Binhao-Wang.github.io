@@ -1,0 +1,85 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { publications } from "../data/publications";
+import type { PublicationStatus } from "../data/publications.manual";
+
+const publicationGroups: { status: PublicationStatus; description: string }[] = [
+  {
+    status: "Published",
+    description: "Peer-reviewed publications"
+  },
+  {
+    status: "Under review",
+    description: "Current manuscripts and preprints"
+  },
+  {
+    status: "In preparation",
+    description: "Active research in development"
+  }
+];
+---
+
+<BaseLayout
+  title="Publications"
+  description="Publications and manuscripts by Binhao Wang in earthquake physics, rock rheology, and earthquake-cycle dynamics."
+>
+  <section class="site-shell page-hero publications-hero">
+    <div>
+      <p class="page-kicker">Publications</p>
+      <h1 class="page-title">A record with clear status.</h1>
+      <p class="page-dek">
+        Papers, current manuscripts, and works in preparation. This list is curated from a single source of truth and checked against the public ORCID record monthly.
+      </p>
+    </div>
+    <aside class="page-aside">
+      <strong>{publications.length} research records</strong>
+      <p>Every automated update is reviewed before publication.</p>
+    </aside>
+  </section>
+
+  <section class="section-tight">
+    <div class="site-shell">
+      <p class="publication-utility">DOI and preprint links open the canonical record.</p>
+
+      {publicationGroups.map((group) => {
+        const groupPublications = publications.filter((publication) => publication.status === group.status);
+        return (
+          <div class="publication-group">
+            <div class="publication-group-heading">
+              <div>
+                <p class="publication-overline">{group.description}</p>
+                <h2>{group.status}</h2>
+              </div>
+              <span>{groupPublications.length} items</span>
+            </div>
+
+            {groupPublications.length > 0 ? (
+              <ol class="publication-list">
+                {groupPublications.map((publication) => (
+                  <li class="publication-item">
+                    <span class="publication-year">{publication.year}</span>
+                    <div>
+                      <h3 class="publication-title">{publication.title}</h3>
+                      <p class="publication-authors">{publication.authors}</p>
+                      <p class="publication-venue">{publication.venue}</p>
+                      {publication.note && <p class="publication-note">{publication.note}</p>}
+                    </div>
+                    {publication.url && (
+                      <div class="publication-links">
+                        <a href={publication.url} rel="external">
+                          {publication.note ?? "DOI"}
+                        </a>
+                      </div>
+                    )}
+                  </li>
+                ))}
+              </ol>
+            ) : (
+              <p class="publication-empty">No records in this section yet.</p>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  </section>
+</BaseLayout>

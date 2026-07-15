@@ -1,0 +1,12 @@
+---
+import type { PublicationStatus } from "../data/publications.manual";
+
+interface Props {
+  status: PublicationStatus;
+}
+
+const { status } = Astro.props;
+const statusClass = status.toLowerCase().replaceAll(" ", "-");
+---
+
+<span class={"status-tag status-" + statusClass}>{status}</span>

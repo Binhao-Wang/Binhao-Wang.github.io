@@ -1,0 +1,52 @@
+name: Refresh publication record
+
+on:
+  schedule:
+    - cron: "17 16 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: publication-sync
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: master
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run sync:publications
+        env:
+          ORCID_ID: "0000-0001-6934-1522"
+      - run: npm run check
+      - run: npm run build
+      - name: Create or update review branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet; then
+            echo "No publication changes found."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B automation/publication-sync
+          git add src/data/publications.generated.json
+          git commit -m "chore: refresh publication record"
+          git push --force origin automation/publication-sync
+          existing_pr=$(gh pr list --head automation/publication-sync --base master --state open --json number --jq '.[0].number')
+          if [ -n "$existing_pr" ]; then
+            gh pr edit "$existing_pr" --title "chore: refresh publication record" --body "Automated ORCID import. Review the generated record before merging."
+          else
+            gh pr create --base master --head automation/publication-sync --title "chore: refresh publication record" --body "Automated ORCID import. Review the generated record before merging."
+          fi

@@ -1,0 +1,26 @@
+---
+import type { CvEntry } from "../data/cv";
+
+interface Props {
+  entries: readonly CvEntry[];
+}
+
+const { entries } = Astro.props;
+---
+
+<ul class="cv-entry-list">
+  {entries.map((entry) => (
+    <li class="cv-entry">
+      <div>
+        <strong class="cv-entry-title">{entry.title}</strong>
+        {(entry.institution || entry.location) && (
+          <span class="cv-entry-institution">
+            {[entry.institution, entry.location].filter(Boolean).join(" · ")}
+          </span>
+        )}
+        {entry.detail && <p class="cv-entry-detail">{entry.detail}</p>}
+      </div>
+      {entry.dates && <span class="cv-entry-date">{entry.dates}</span>}
+    </li>
+  ))}
+</ul>

@@ -1,0 +1,121 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import CvEntryList from "../components/CvEntryList.astro";
+import { cv } from "../data/cv";
+import { publications } from "../data/publications";
+import { profile } from "../data/site";
+---
+
+<BaseLayout
+  title="CV"
+  description="Curriculum vitae for Binhao Wang, an earthquake physicist working across rock mechanics, earthquake-cycle simulations, and observational seismology."
+>
+  <section class="site-shell page-hero cv-intro">
+    <div>
+      <p class="page-kicker">Curriculum vitae</p>
+      <h1 class="page-title">The full research record.</h1>
+      <p class="page-dek">
+        {profile.researchLine}. The HTML version below is kept accessible and current alongside the downloadable CV.
+      </p>
+    </div>
+    <aside class="cv-file-card">
+      <p class="cv-label">Downloadable document</p>
+      <strong>CV · PDF</strong>
+      <p>Updated {cv.updated}. Includes the complete record of field and laboratory experience.</p>
+      <a class="button button-ink" href="/files/Binhao_Wang_CV.pdf">Download CV</a>
+    </aside>
+  </section>
+
+  <section class="site-shell">
+    <div class="cv-section">
+      <div class="cv-section-title">
+        <p class="section-kicker">01</p>
+        <h2>Education</h2>
+      </div>
+      <CvEntryList entries={cv.education} />
+    </div>
+
+    <div class="cv-section">
+      <div class="cv-section-title">
+        <p class="section-kicker">02</p>
+        <h2>Publications and manuscripts</h2>
+        <p>Full citation list with current status.</p>
+      </div>
+      <ol class="publication-list">
+        {publications.map((publication) => (
+          <li class="publication-item">
+            <span class="publication-year">{publication.year}</span>
+            <div>
+              <h3 class="publication-title">{publication.title}</h3>
+              <p class="publication-authors">{publication.authors}</p>
+              <p class="publication-venue">{publication.venue}</p>
+              <p class="publication-note">{publication.status}{publication.note ? " · " + publication.note : ""}</p>
+            </div>
+            {publication.url && (
+              <div class="publication-links">
+                <a href={publication.url} rel="external">Record</a>
+              </div>
+            )}
+          </li>
+        ))}
+      </ol>
+    </div>
+
+    <div class="cv-section">
+      <div class="cv-section-title">
+        <p class="section-kicker">03</p>
+        <h2>Ongoing projects</h2>
+      </div>
+      <CvEntryList entries={cv.ongoingProjects} />
+    </div>
+
+    <div class="cv-section">
+      <div class="cv-section-title">
+        <p class="section-kicker">04</p>
+        <h2>Teaching</h2>
+        <p>Nine semesters across graduate and undergraduate instruction.</p>
+      </div>
+      <CvEntryList entries={cv.teaching} />
+    </div>
+
+    <div class="cv-section">
+      <div class="cv-section-title">
+        <p class="section-kicker">05</p>
+        <h2>Awards and grants</h2>
+      </div>
+      <CvEntryList entries={cv.awards} />
+    </div>
+
+    <div class="cv-section">
+      <div class="cv-section-title">
+        <p class="section-kicker">06</p>
+        <h2>Leadership and service</h2>
+      </div>
+      <CvEntryList entries={cv.service} />
+    </div>
+
+    <div class="cv-section">
+      <div class="cv-section-title">
+        <p class="section-kicker">07</p>
+        <h2>Selected presentations</h2>
+      </div>
+      <CvEntryList entries={cv.presentations} />
+    </div>
+
+    <div class="cv-section">
+      <div class="cv-section-title">
+        <p class="section-kicker">08</p>
+        <h2>Lab and field experience</h2>
+      </div>
+      <CvEntryList entries={cv.labAndField} />
+    </div>
+
+    <div class="cv-section">
+      <div class="cv-section-title">
+        <p class="section-kicker">09</p>
+        <h2>Skills</h2>
+      </div>
+      <CvEntryList entries={cv.skills} />
+    </div>
+  </section>
+</BaseLayout>

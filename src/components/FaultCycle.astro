@@ -1,0 +1,98 @@
+---
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+---
+
+<figure class:list={["fault-cycle", { compact }]}>
+  <svg viewBox="0 0 700 500" role="img" aria-labelledby="cycle-title cycle-desc">
+    <title id="cycle-title">Conceptual velocity–temperature friction map</title>
+    <desc id="cycle-desc">
+      A conceptual field showing a fault moving between stable and unstable slip regimes as velocity and temperature evolve.
+    </desc>
+    <defs>
+      <linearGradient id="cycle-bg" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#122a33" />
+        <stop offset="58%" stop-color="#183a45" />
+        <stop offset="100%" stop-color="#552c2b" />
+      </linearGradient>
+      <radialGradient id="thermal-pool" cx="70%" cy="63%" r="54%">
+        <stop offset="0%" stop-color="#e6653c" stop-opacity="0.95" />
+        <stop offset="48%" stop-color="#b84932" stop-opacity="0.35" />
+        <stop offset="100%" stop-color="#b84932" stop-opacity="0" />
+      </radialGradient>
+      <linearGradient id="slip-track" x1="0" y1="1" x2="1" y2="0">
+        <stop offset="0%" stop-color="#8db5bb" />
+        <stop offset="45%" stop-color="#f1d9a3" />
+        <stop offset="100%" stop-color="#ee6b43" />
+      </linearGradient>
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="7" result="blur" />
+        <feMerge>
+          <feMergeNode in="blur" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+      <clipPath id="plot-clip">
+        <rect x="78" y="58" width="550" height="354" rx="18" />
+      </clipPath>
+    </defs>
+
+    <rect class="cycle-background" x="22" y="18" width="656" height="446" rx="28" />
+    <g clip-path="url(#plot-clip)">
+      <rect x="78" y="58" width="550" height="354" rx="18" fill="url(#cycle-bg)" />
+      <rect x="78" y="58" width="550" height="354" rx="18" fill="url(#thermal-pool)" />
+
+      <g class="cycle-grid" aria-hidden="true">
+        <path d="M78 128H628M78 198H628M78 268H628M78 338H628" />
+        <path d="M188 58V412M298 58V412M408 58V412M518 58V412" />
+      </g>
+
+      <path
+        class="regime-field regime-field-cool"
+        d="M78 58H355C298 118 258 177 265 244C274 331 188 358 78 338Z"
+      />
+      <path
+        class="regime-field regime-field-hot"
+        d="M420 58H628V412H378C470 353 480 274 449 216C421 164 426 104 420 58Z"
+      />
+      <path
+        class="thermal-contour contour-one"
+        d="M278 397C270 287 340 236 399 211C470 182 493 108 450 59"
+      />
+      <path
+        class="thermal-contour contour-two"
+        d="M326 414C300 300 366 255 435 220C511 182 536 119 496 57"
+      />
+      <path
+        class="slip-path"
+        d="M132 342C178 312 178 270 221 251C269 229 300 256 333 227C374 191 354 143 414 125C475 107 497 176 552 137"
+      />
+      <path
+        class="slip-path glow-path"
+        d="M132 342C178 312 178 270 221 251C269 229 300 256 333 227C374 191 354 143 414 125C475 107 497 176 552 137"
+        filter="url(#glow)"
+      />
+      <g transform="translate(132 342)">
+        <g class="cycle-marker">
+          <circle class="cycle-marker-halo" r="22" />
+          <circle class="cycle-marker-dot" r="7" />
+        </g>
+      </g>
+    </g>
+
+    <g class="cycle-labels">
+      <text x="100" y="92">stable sliding</text>
+      <text x="491" y="92">dynamic slip</text>
+      <text x="276" y="390">cycle pathway</text>
+      <text x="78" y="444">slip velocity →</text>
+      <text transform="translate(48 364) rotate(-90)">temperature ↑</text>
+    </g>
+  </svg>
+  <figcaption>
+    <span>Conceptual friction map</span>
+    <small>Velocity and temperature reshape which slip mode a fault selects.</small>
+  </figcaption>
+</figure>

@@ -1,0 +1,85 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FaultCycle from "../components/FaultCycle.astro";
+import StatusTag from "../components/StatusTag.astro";
+import { researchStories } from "../data/research";
+---
+
+<BaseLayout
+  title="Research"
+  description="Binhao Wang studies how evolving rock rheology shapes earthquake cycles, from microscopic fault contacts to dynamic rupture and fault-system segmentation."
+>
+  <section class="site-shell page-hero">
+    <div>
+      <p class="page-kicker">Research</p>
+      <h1 class="page-title">Rock behavior is earthquake behavior.</h1>
+      <p class="page-dek">
+        I investigate how evolving material properties turn a single fault system into a spectrum of slip behavior, from stable creep and slow slip to swarms and dynamic rupture.
+      </p>
+    </div>
+    <aside class="page-aside">
+      <strong>One agenda across scales</strong>
+      <p>Contacts → friction → rupture → fault systems</p>
+    </aside>
+  </section>
+
+  <section class="section-tight">
+    <div class="site-shell">
+      {researchStories.map((story, index) => (
+        <article id={story.id} class="research-story">
+          <span class="story-index">0{index + 1}</span>
+          <div class="story-main">
+            <p class="research-label">{story.label}</p>
+            <h2>{story.title}</h2>
+            <p class="story-summary">{story.summary}</p>
+            <p class="story-detail">{story.detail}</p>
+          </div>
+          <aside class="story-aside">
+            <StatusTag status={story.status} />
+            <p>Evidence</p>
+            <strong>{story.citation}</strong>
+          </aside>
+        </article>
+      ))}
+
+      <div class="research-figure-row">
+        <div>
+          <p class="section-kicker">A moving seismogenic zone</p>
+          <h2>State is not a fixed location.</h2>
+          <p>
+            Temperature and slip velocity can move the boundary between stable and unstable behavior through the earthquake cycle. The figure is a conceptual map, not a measured dataset.
+          </p>
+        </div>
+        <FaultCycle compact={true} />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="site-shell">
+      <div class="section-topline">
+        <div>
+          <p class="section-kicker">A rock-centric view</p>
+          <h2 class="section-heading">The mechanism must survive every change of scale.</h2>
+        </div>
+      </div>
+      <div class="research-scale">
+        <article>
+          <span class="scale-number">MICROSCALE</span>
+          <h3>Contact quality</h3>
+          <p>Healing, hydrothermal alteration, and evolving contact populations set how faults strengthen or weaken.</p>
+        </article>
+        <article>
+          <span class="scale-number">FAULT SCALE</span>
+          <h3>Slip mode</h3>
+          <p>Thermal and rate-dependent friction determine whether motion localizes into pulses, swarms, slow slip, or rupture.</p>
+        </article>
+        <article>
+          <span class="scale-number">SYSTEM SCALE</span>
+          <h3>Segmentation</h3>
+          <p>Long-term loading heterogeneity can organize multi-segment faults into changing rupture patterns and supercycles.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
