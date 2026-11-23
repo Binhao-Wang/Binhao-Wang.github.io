@@ -1,0 +1,28 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import NewsList from "../components/NewsList.astro";
+import { news } from "../data/news";
+---
+
+<BaseLayout
+  title="News & talks"
+  description="News, talks, and meeting presentations by Binhao Wang."
+>
+  <section class="site-shell page-hero">
+    <div>
+      <p class="page-kicker">News &amp; talks</p>
+      <h1 class="page-title">What's new.</h1>
+      <p class="page-dek">Talks, meetings, papers, and milestones, newest first.</p>
+    </div>
+    <aside class="page-aside">
+      <strong>{news.length} entries</strong>
+      <p>Since {news[news.length - 1].when}</p>
+    </aside>
+  </section>
+
+  <section class="section-tight">
+    <div class="site-shell news-page">
+      <NewsList items={news} visible={8} />
+    </div>
+  </section>
+</BaseLayout>

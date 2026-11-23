@@ -1,0 +1,29 @@
+---
+import FaultCycle from "./FaultCycle.astro";
+import YouTubeFacade from "./YouTubeFacade.astro";
+import { profile } from "../data/site";
+
+// Home feature visual: `profile.heroYouTube`, else the looping video from `profile.heroVideo`, else the FaultCycle SVG.
+// With prefers-reduced-motion the video is hidden and its poster frame shown instead (no JavaScript needed).
+const youtube = profile.heroYouTubeDisabled ? undefined : profile.heroYouTube;
+const video = profile.heroVideo;
+---
+
+{youtube ? (
+  <YouTubeFacade {...youtube} eager={true} />
+) : video ? (
+  <figure class="hero-video">
+    <video class="hero-video-motion" autoplay muted loop playsinline preload="metadata" poster={video.poster} aria-label={video.alt}>
+      <source src={video.src} type="video/mp4" />
+    </video>
+    <img class="hero-video-still" src={video.poster} alt={video.alt} loading="eager" decoding="async" />
+    {(video.caption || video.link) && (
+      <figcaption>
+        {video.caption}
+        {video.link && <> <a href={video.link.href} rel="external">{video.link.label} →</a></>}
+      </figcaption>
+    )}
+  </figure>
+) : (
+  <FaultCycle />
+)}

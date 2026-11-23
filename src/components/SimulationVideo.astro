@@ -1,0 +1,38 @@
+---
+import { getImage } from "astro:assets";
+import type { Movie } from "../data/site";
+
+// Self-hosted simulation movie. It never autoplays and preloads nothing, so every visitor
+// (including those who prefer reduced motion) sees the poster until they press play.
+interface Props {
+  movie: Movie;
+}
+
+const { movie } = Astro.props;
+const poster = await getImage({ src: movie.poster, width: Math.min(1280, movie.poster.width), format: "webp" });
+---
+
+<figure class="media-movie">
+  <div class="media-movie-frame">
+    <video
+      controls
+      muted
+      loop
+      playsinline
+      preload="none"
+      poster={poster.src}
+      width={movie.poster.width}
+      height={movie.poster.height}
+      aria-label={movie.alt}
+    >
+      {movie.webm && <source src={movie.webm} type="video/webm" />}
+      <source src={movie.mp4} type="video/mp4" />
+      <a href={movie.mp4}>Download the movie (MP4)</a>
+    </video>
+  </div>
+  <figcaption>
+    {movie.label && <span class="media-movie-label">{movie.label}</span>}
+    {movie.caption}
+    <a class="media-movie-more" href={movie.mp4}>Open the movie (MP4)</a>
+  </figcaption>
+</figure>

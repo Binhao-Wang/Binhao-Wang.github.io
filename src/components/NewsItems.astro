@@ -1,0 +1,18 @@
+---
+import type { NewsItem } from "../data/news";
+
+interface Props {
+  items: readonly NewsItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<ul class="news-list">
+  {items.map((item) => (
+    <li class="news-item">
+      <span class="news-when">{item.when}<span class="news-kind">{item.kind}</span></span>
+      <p>{item.url ? <a href={item.url} rel="external">{item.text}</a> : item.text}</p>
+    </li>
+  ))}
+</ul>

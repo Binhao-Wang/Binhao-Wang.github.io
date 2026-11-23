@@ -8,6 +8,7 @@ type PublicationOverrides = {
 };
 
 const overrides = publicationOverrides as PublicationOverrides;
+const statusOrder: Publication["status"][] = ["Published", "Under review", "In preparation"];
 
 const normalizeDoi = (doi?: string) => doi?.toLowerCase().replace(/^https?:\/\/doi\.org\//, "");
 
@@ -19,4 +20,9 @@ export const publications = [...manualPublications, ...generated.filter((publica
     ...publication,
     ...(publication.doi ? overrides.byDoi[normalizeDoi(publication.doi) ?? ""] : undefined)
   }))
-  .sort((left, right) => right.year - left.year || left.title.localeCompare(right.title));
+  .sort(
+    (left, right) =>
+      statusOrder.indexOf(left.status) - statusOrder.indexOf(right.status) ||
+      right.year - left.year ||
+      left.title.localeCompare(right.title)
+  );

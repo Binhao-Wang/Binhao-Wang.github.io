@@ -1,0 +1,12 @@
+---
+import { profile } from "../data/site";
+
+// A short invitation to ask about work in progress; links to the public email.
+---
+
+{profile.email && (
+  <p class="contact-invite">
+    Much of my current work is still in progress. I'm happy to share drafts or talk about ongoing projects:{" "}
+    <a href={"mailto:" + profile.email}>email me</a>.
+  </p>
+)}

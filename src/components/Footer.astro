@@ -6,11 +6,12 @@ import { profile } from "../data/site";
   <div class="site-shell footer-inner">
     <div>
       <p class="footer-mark">Binhao Wang</p>
-      <p class="footer-note">Rock rheology · earthquake-cycle dynamics</p>
+      <p class="footer-note">Physics-based earthquake forecasting · {profile.affiliation}</p>
     </div>
 
     <div class="footer-links" aria-label="Professional links">
-      <a href={"mailto:" + profile.email}>Email</a>
+      {profile.email && <a href={"mailto:" + profile.email}>Email</a>}
+      <a href={profile.links.scholar} rel="external">Scholar</a>
       <a href={profile.links.orcid} rel="me external">ORCID</a>
       <a href={profile.links.github} rel="external">GitHub</a>
     </div>

@@ -16,5 +16,9 @@
     "@astrojs/check": "^0.9.9",
     "astro": "^7.0.9",
     "typescript": "^6.0.3"
+  },
+  "dependencies": {
+    "@fontsource-variable/raleway": "^5.3.0",
+    "@fontsource-variable/work-sans": "^5.3.0"
   }
 }

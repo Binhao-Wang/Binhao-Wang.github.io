@@ -1,46 +1,80 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import ContactInvite from "../components/ContactInvite.astro";
 import FaultCycle from "../components/FaultCycle.astro";
+import MediaFrame from "../components/MediaFrame.astro";
+import SimulationVideo from "../components/SimulationVideo.astro";
 import StatusTag from "../components/StatusTag.astro";
-import { researchStories } from "../data/research";
+import { researchStories, sideProjects } from "../data/research";
 ---
 
 <BaseLayout
   title="Research"
-  description="Binhao Wang studies how evolving rock rheology shapes earthquake cycles, from microscopic fault contacts to dynamic rupture and fault-system segmentation."
+  description="Binhao Wang builds physics-based earthquake forecasts grounded in rock rheology, repeating earthquakes, and fault-system segmentation."
 >
   <section class="site-shell page-hero">
     <div>
       <p class="page-kicker">Research</p>
-      <h1 class="page-title">Rock behavior is earthquake behavior.</h1>
+      <h1 class="page-title"><span class="title-line">From earthquake physics</span> <span class="title-line">to forecasts.</span></h1>
       <p class="page-dek">
-        I investigate how evolving material properties turn a single fault system into a spectrum of slip behavior, from stable creep and slow slip to swarms and dynamic rupture.
+        I study what controls how natural earthquakes start, grow, stop and recur, using physics-based earthquake-cycle simulations constrained by laboratory experiments. I am now bringing these physical insights into probabilistic earthquake forecasting.
       </p>
+      <ContactInvite />
     </div>
     <aside class="page-aside">
-      <strong>One agenda across scales</strong>
-      <p>Contacts → friction → rupture → fault systems</p>
+      <strong>Earthquake physics across scales</strong>
+      <p>From frictional grain contacts to plate-boundary fault systems.</p>
     </aside>
   </section>
 
   <section class="section-tight">
     <div class="site-shell">
-      {researchStories.map((story, index) => (
-        <article id={story.id} class="research-story">
-          <span class="story-index">0{index + 1}</span>
-          <div class="story-main">
-            <p class="research-label">{story.label}</p>
-            <h2>{story.title}</h2>
-            <p class="story-summary">{story.summary}</p>
-            <p class="story-detail">{story.detail}</p>
-          </div>
-          <aside class="story-aside">
-            <StatusTag status={story.status} />
-            <p>Evidence</p>
-            <strong>{story.citation}</strong>
-          </aside>
-        </article>
-      ))}
+      {researchStories.map((story, index) => {
+        return (
+          <article id={story.id} class="research-story">
+            <span class="story-index">0{index + 1}</span>
+            <div class="story-main">
+              <p class="research-label">{story.label}</p>
+              <h2>{story.title}</h2>
+              <p class="story-summary">{story.summary}</p>
+              <p class="story-detail">{story.detail}</p>
+              {[story.image, ...(story.moreFigures ?? [])].map((figure) => {
+                const fullSize = typeof figure.src === "string" ? figure.src : figure.src?.src;
+                // Never upscale: cap at the intrinsic width plus the panel's padding and border.
+                const maxWidth = figure.src && typeof figure.src !== "string" ? `max-width: calc(${figure.src.width}px + 1.2rem + 2px)` : undefined;
+                return fullSize ? (
+                  <figure class="story-figure" style={maxWidth}>
+                    <a href={fullSize} class="story-figure-link" title="Open the full-size figure">
+                      <MediaFrame photo={figure} kind="figure" label={story.label} class="story-image" sizes="(max-width: 900px) 100vw, 60vw" />
+                    </a>
+                    <figcaption>
+                      {figure.caption}
+                      {figure.credit && <span class="story-figure-credit"> Figure: {figure.credit}.</span>}
+                      <a href={fullSize} class="story-figure-open">Full-size figure</a>
+                    </figcaption>
+                  </figure>
+                ) : (
+                  <MediaFrame photo={figure} kind="figure" label={story.label} class="story-image" />
+                );
+              })}
+              {story.movie && <SimulationVideo movie={story.movie} />}
+            </div>
+            <aside class="story-aside">
+              <StatusTag status={story.status} />
+              <p>Evidence</p>
+              {story.papers.length > 0 ? (
+                <ul class="story-papers">
+                  {story.papers.map((paper) => (
+                    <li>{paper.url ? <a href={paper.url} rel="external">{paper.label}</a> : paper.label}</li>
+                  ))}
+                </ul>
+              ) : (
+                <strong>{story.citation}</strong>
+              )}
+            </aside>
+          </article>
+        );
+      })}
 
       <div class="research-figure-row">
         <div>
@@ -55,31 +89,23 @@ import { researchStories } from "../data/research";
     </div>
   </section>
 
-  <section class="section">
+  <section class="section-tight">
     <div class="site-shell">
       <div class="section-topline">
         <div>
-          <p class="section-kicker">A rock-centric view</p>
-          <h2 class="section-heading">The mechanism must survive every change of scale.</h2>
+          <p class="section-kicker">More research</p>
+          <h2 class="panel-heading">Collaborative projects.</h2>
         </div>
       </div>
-      <div class="research-scale">
-        <article>
-          <span class="scale-number">MICROSCALE</span>
-          <h3>Contact quality</h3>
-          <p>Healing, hydrothermal alteration, and evolving contact populations set how faults strengthen or weaken.</p>
-        </article>
-        <article>
-          <span class="scale-number">FAULT SCALE</span>
-          <h3>Slip mode</h3>
-          <p>Thermal and rate-dependent friction determine whether motion localizes into pulses, swarms, slow slip, or rupture.</p>
-        </article>
-        <article>
-          <span class="scale-number">SYSTEM SCALE</span>
-          <h3>Segmentation</h3>
-          <p>Long-term loading heterogeneity can organize multi-segment faults into changing rupture patterns and supercycles.</p>
-        </article>
-      </div>
+      <ul class="side-projects">
+        {sideProjects.map((project) => (
+          <li>
+            <StatusTag status={project.status} />
+            <strong>{project.url ? <a href={project.url} rel="external">{project.title}</a> : project.title}</strong>
+            <span>{project.people}</span>
+          </li>
+        ))}
+      </ul>
     </div>
   </section>
 </BaseLayout>

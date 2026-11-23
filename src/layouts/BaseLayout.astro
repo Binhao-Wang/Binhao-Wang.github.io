@@ -2,6 +2,8 @@
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import { profile } from "../data/site";
+import "@fontsource-variable/raleway";
+import "@fontsource-variable/work-sans";
 import "../styles/global.css";
 
 interface Props {
@@ -20,10 +22,24 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#f3efe6" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#121417" media="(prefers-color-scheme: dark)" />
     <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{pageTitle}</title>
+    <script is:inline>
+      // Apply the stored or system theme before first paint to avoid a flash.
+      (() => {
+        let theme;
+        try {
+          theme = localStorage.getItem("theme");
+        } catch {}
+        if (theme !== "light" && theme !== "dark") {
+          theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>

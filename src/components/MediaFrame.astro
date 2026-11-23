@@ -1,0 +1,61 @@
+---
+import { Picture } from "astro:assets";
+import type { Photo } from "../data/site";
+
+// Renders `photo.src` when set; otherwise a neutral placeholder (initials for people, a motif for figures).
+// Imported images become responsive AVIF/WebP. Figures are letterboxed on a light panel so labels and credits are never cropped.
+interface Props {
+  photo: Photo;
+  kind: "avatar" | "figure";
+  label?: string;
+  class?: string;
+  eager?: boolean;
+  /** `sizes` hint for responsive widths of imported figures. */
+  sizes?: string;
+}
+
+const { photo, kind, label = "", class: className, eager = false, sizes = "(max-width: 900px) 100vw, 50vw" } = Astro.props;
+const initials = label
+  .split(/\s+/)
+  .filter(Boolean)
+  .map((word) => word[0])
+  .slice(0, 2)
+  .join("")
+  .toUpperCase();
+const classes = ["media-frame", "media-" + kind, kind === "figure" && "media-figure-image", className];
+const loading = eager ? "eager" : "lazy";
+const image = photo.src && typeof photo.src !== "string" ? photo.src : undefined;
+// Candidate widths never upscale; the original width is always offered for sharp full-size display.
+const targetWidths = kind === "avatar" ? [176, 352] : [480, 800, 1200, 1600];
+const widths = image ? [...targetWidths.filter((width) => width < image.width), image.width] : [];
+---
+
+{image ? (
+  <Picture
+    src={image}
+    alt={photo.alt}
+    class:list={classes}
+    pictureAttributes={{ class: "media-picture" }}
+    formats={["avif", "webp"]}
+    fallbackFormat={kind === "avatar" || image?.format === "jpg" || image?.format === "jpeg" ? "jpg" : "png"}
+    widths={widths}
+    sizes={kind === "avatar" ? "176px" : sizes}
+    loading={loading}
+    decoding="async"
+  />
+) : photo.src ? (
+  <img class:list={classes} src={photo.src as string} alt={photo.alt} loading={loading} decoding="async" />
+) : kind === "avatar" ? (
+  <div class:list={["media-frame", "media-avatar", "media-placeholder", className]} role="img" aria-label={photo.alt + " (photo forthcoming)"}>
+    <span aria-hidden="true">{initials}</span>
+  </div>
+) : (
+  <div class:list={["media-frame", "media-figure", "media-placeholder", className]} role="img" aria-label={photo.alt + " (image forthcoming)"}>
+    <svg viewBox="0 0 320 200" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+      <path class="motif-line" d="M0 150C60 132 92 92 150 98C210 104 236 52 320 44" />
+      <path class="motif-line motif-faint" d="M0 176C70 160 110 128 170 132C232 136 262 96 320 90" />
+      <path class="motif-line motif-faint" d="M0 118C52 100 96 58 152 62C214 66 250 22 320 14" />
+    </svg>
+    <span class="media-caption">{label || "Image"} · forthcoming</span>
+  </div>
+)}

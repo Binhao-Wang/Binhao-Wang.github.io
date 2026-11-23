@@ -1,0 +1,31 @@
+---
+// Hidden until photos are ready: rename to photos.astro and restore the nav entry in src/data/site.ts.
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PhotoGrid from "../components/PhotoGrid.astro";
+import { photos } from "../data/photos";
+---
+
+<BaseLayout
+  title="Photos & fieldwork"
+  description="Fieldwork and laboratory photos by Binhao Wang, from fault zones in California to seismometer deployments in Sichuan."
+>
+  <section class="site-shell page-hero">
+    <div>
+      <p class="page-kicker">Photos &amp; fieldwork</p>
+      <h1 class="page-title">Where the rocks are.</h1>
+      <p class="page-dek">
+        Fault zones, outcrops, and laboratories that shaped how I think about earthquakes.
+      </p>
+    </div>
+    <aside class="page-aside">
+      <strong>{photos.length} places</strong>
+      <p>Field and lab work, 2020 to today.</p>
+    </aside>
+  </section>
+
+  <section class="section-tight">
+    <div class="site-shell">
+      <PhotoGrid photos={photos} />
+    </div>
+  </section>
+</BaseLayout>

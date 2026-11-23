@@ -18,8 +18,13 @@ npm run build
 
 ## Content
 
-- `src/data/site.ts` holds the biography and professional links.
-- `src/data/research.ts` holds the featured research stories.
+- `src/data/site.ts` holds the identity line, biography, portrait, email, and professional links.
+- `src/data/research.ts` holds the research chapters (with image slots) and other projects.
+- `src/data/people.ts` maps co-author names to profile links used in author lists.
+- `src/data/news.ts` holds dated news and talks (home shows the latest three).
+- `src/data/photos.ts` holds the captioned fieldwork gallery.
+- Images go in `public/images/`; set the matching `src` field to swap a placeholder for a real file.
+- Search for `TODO(user)` to find content still needed.
 - `src/data/publications.manual.ts` holds the curated publication record.
 - `src/data/publications.generated.json` is generated from ORCID when configured.
 - `src/data/publications.overrides.json` preserves hand-curated labels and links.

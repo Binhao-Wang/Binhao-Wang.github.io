@@ -1,4 +1,5 @@
 ---
+import MediaFrame from "./MediaFrame.astro";
 import StatusTag from "./StatusTag.astro";
 import type { ResearchStory } from "../data/research";
 
@@ -12,14 +13,16 @@ const { story, index } = Astro.props;
 
 <article class={"research-card research-card-" + story.accent}>
   <a href={story.href} class="research-card-link" aria-label={"Read about " + story.title}>
-    <div class="research-card-topline">
-      <span class="research-index">0{index + 1}</span>
-      <StatusTag status={story.status} />
+    <MediaFrame photo={story.cardImage ?? story.image} kind="figure" label={story.label} class="research-card-image" />
+    <div class="research-card-body">
+      <div class="research-card-topline">
+        <StatusTag status={story.status} />
+        <span class="research-index">0{index + 1}</span>
+      </div>
+      <p class="research-label">{story.label}</p>
+      <h3>{story.title}</h3>
+      <p class="research-summary">{story.summary}</p>
+      <p class="research-citation">{story.citation}</p>
     </div>
-    <p class="research-label">{story.label}</p>
-    <h3>{story.title}</h3>
-    <p class="research-summary">{story.summary}</p>
-    <p class="research-citation">{story.citation}</p>
-    <span class="research-arrow" aria-hidden="true">↘</span>
   </a>
 </article>

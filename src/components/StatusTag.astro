@@ -1,8 +1,9 @@
 ---
 import type { PublicationStatus } from "../data/publications.manual";
+import type { ResearchStatus } from "../data/research";
 
 interface Props {
-  status: PublicationStatus;
+  status: PublicationStatus | ResearchStatus;
 }
 
 const { status } = Astro.props;

@@ -1,4 +1,5 @@
 ---
+import ThemeToggle from "./ThemeToggle.astro";
 import { navigation, profile } from "../data/site";
 
 const path = Astro.url.pathname.replace(/\/$/, "") || "/";
@@ -8,23 +9,25 @@ const isCurrent = (href: string) => (href === "/" ? path === "/" : path === href
 <header class="site-header">
   <div class="site-shell header-inner">
     <a class="nameplate" href="/" aria-label={"Go to " + profile.name + " home"}>
-      <span class="nameplate-mark" aria-hidden="true">BW</span>
       <span class="nameplate-copy">
         <span>{profile.name}</span>
         <small>{profile.shortRole}</small>
       </span>
     </a>
 
-    <nav class="primary-nav" aria-label="Primary navigation">
-      {navigation.map((item) => (
-        <a
-          href={item.href}
-          class:list={{ current: isCurrent(item.href) }}
-          aria-current={isCurrent(item.href) ? "page" : undefined}
-        >
-          {item.label}
-        </a>
-      ))}
-    </nav>
+    <div class="header-actions">
+      <nav class="primary-nav" aria-label="Primary navigation">
+        {navigation.map((item) => (
+          <a
+            href={item.href}
+            class:list={{ current: isCurrent(item.href) }}
+            aria-current={isCurrent(item.href) ? "page" : undefined}
+          >
+            {item.label}
+          </a>
+        ))}
+      </nav>
+      <ThemeToggle />
+    </div>
   </div>
 </header>

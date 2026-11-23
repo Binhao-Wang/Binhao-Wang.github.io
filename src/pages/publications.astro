@@ -1,6 +1,9 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import AuthorList from "../components/AuthorList.astro";
+import ContactInvite from "../components/ContactInvite.astro";
 import { publications } from "../data/publications";
+import { profile } from "../data/site";
 import type { PublicationStatus } from "../data/publications.manual";
 
 const publicationGroups: { status: PublicationStatus; description: string }[] = [
@@ -10,7 +13,7 @@ const publicationGroups: { status: PublicationStatus; description: string }[] = 
   },
   {
     status: "Under review",
-    description: "Current manuscripts and preprints"
+    description: "Submitted manuscripts"
   },
   {
     status: "In preparation",
@@ -26,14 +29,15 @@ const publicationGroups: { status: PublicationStatus; description: string }[] = 
   <section class="site-shell page-hero publications-hero">
     <div>
       <p class="page-kicker">Publications</p>
-      <h1 class="page-title">A record with clear status.</h1>
+      <h1 class="page-title">Papers and work in progress.</h1>
       <p class="page-dek">
-        Papers, current manuscripts, and works in preparation. This list is curated from a single source of truth and checked against the public ORCID record monthly.
+        Peer-reviewed papers, manuscripts under review, and work in preparation, from laboratory friction and earthquake-cycle simulations to fault systems and repeating earthquakes.
       </p>
+      <ContactInvite />
     </div>
     <aside class="page-aside">
-      <strong>{publications.length} research records</strong>
-      <p>Every automated update is reviewed before publication.</p>
+      <strong><span class="nowrap">{publications.filter((p) => p.status === "Published").length} published</span> · <span class="nowrap">{publications.filter((p) => p.status === "Under review").length} under review</span> · <span class="nowrap">{publications.filter((p) => p.status === "In preparation").length} in preparation</span></strong>
+      <p>See also <a href={profile.links.scholar} rel="external">Google Scholar</a>.</p>
     </aside>
   </section>
 
@@ -43,6 +47,7 @@ const publicationGroups: { status: PublicationStatus; description: string }[] = 
 
       {publicationGroups.map((group) => {
         const groupPublications = publications.filter((publication) => publication.status === group.status);
+        if (groupPublications.length === 0) return null;
         return (
           <div class="publication-group">
             <div class="publication-group-heading">
@@ -57,11 +62,11 @@ const publicationGroups: { status: PublicationStatus; description: string }[] = 
               <ol class="publication-list">
                 {groupPublications.map((publication) => (
                   <li class="publication-item">
-                    <span class="publication-year">{publication.year}</span>
+                    <span class="publication-year">{publication.status === "Published" ? publication.year : "—"}</span>
                     <div>
                       <h3 class="publication-title">{publication.title}</h3>
-                      <p class="publication-authors">{publication.authors}</p>
-                      <p class="publication-venue">{publication.venue}</p>
+                      <p class="publication-authors"><AuthorList authors={publication.authors} /></p>
+                      {publication.status === "Published" && <p class="publication-venue">{publication.venue}</p>}
                       {publication.note && <p class="publication-note">{publication.note}</p>}
                     </div>
                     {publication.url && (

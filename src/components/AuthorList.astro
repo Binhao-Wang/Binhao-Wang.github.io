@@ -1,0 +1,19 @@
+---
+import { coauthorLink, isSelf } from "../data/people";
+
+// Renders an author string ("A, B, and C") with the site owner in bold and known co-authors linked.
+interface Props {
+  authors: string;
+}
+
+const { authors } = Astro.props;
+// Split on ", and " / ", " / " and " while keeping the separators so the text reads exactly as written.
+const tokens = authors.split(/(,\s+and\s+|,\s+|\s+and\s+)/);
+---
+
+{tokens.map((token, index) => {
+  if (index % 2 === 1) return token;
+  const url = coauthorLink(token);
+  if (isSelf(token)) return <strong class="author-self">{token}</strong>;
+  return url ? <a class="author-link" href={url} rel="external">{token}</a> : token;
+})}

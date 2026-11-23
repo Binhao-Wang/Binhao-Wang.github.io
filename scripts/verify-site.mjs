@@ -149,8 +149,11 @@ const oversized = await Promise.all(
   files.map(async (file) => ({ file, size: (await stat(file)).size }))
 );
 for (const file of oversized) {
-  if (file.size > 1024 * 1024) {
-    addError(path.relative(dist, file.file) + " exceeds the 1 MB asset budget.");
+  // Videos load only on demand (preload="none"), so they get a separate 4 MB budget.
+  const isVideo = /\.(mp4|webm)$/i.test(file.file);
+  const budgetMB = isVideo ? 4 : 1;
+  if (file.size > budgetMB * 1024 * 1024) {
+    addError(path.relative(dist, file.file) + ` exceeds the ${budgetMB} MB ${isVideo ? "video" : "asset"} budget.`);
   }
 }
 

@@ -1,0 +1,21 @@
+---
+import NewsItems from "./NewsItems.astro";
+import type { NewsItem } from "../data/news";
+
+// Shows the first `visible` items; the rest sit behind a native "show more" toggle (no JavaScript).
+interface Props {
+  items: readonly NewsItem[];
+  visible?: number;
+}
+
+const { items, visible = items.length } = Astro.props;
+const hidden = items.slice(visible);
+---
+
+<NewsItems items={items.slice(0, visible)} />
+{hidden.length > 0 && (
+  <details class="news-more">
+    <summary>Show {hidden.length} more</summary>
+    <NewsItems items={hidden} />
+  </details>
+)}

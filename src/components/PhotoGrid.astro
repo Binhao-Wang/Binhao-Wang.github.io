@@ -1,0 +1,24 @@
+---
+import MediaFrame from "./MediaFrame.astro";
+import type { GalleryPhoto } from "../data/photos";
+
+interface Props {
+  photos: readonly GalleryPhoto[];
+}
+
+const { photos } = Astro.props;
+---
+
+<ul class="photo-grid">
+  {photos.map((photo) => (
+    <li>
+      <figure class="photo-card">
+        <MediaFrame photo={photo} kind="figure" label="Photo" />
+        <figcaption>
+          <strong>{photo.caption}</strong>
+          <span>{photo.place} · {photo.year}</span>
+        </figcaption>
+      </figure>
+    </li>
+  ))}
+</ul>
